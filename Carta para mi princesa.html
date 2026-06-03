@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para mi princesita bonita </title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --wood: #8b5a3c;
+      --paper: #fff7df;
+      --paper-dark: #ead7aa;
+      --ink: #3d2b1f;
+      --rose: #b85c70;
+      --rose-dark: #7e3344;
+      --cream: #fffaf0;
+      --shadow: rgba(40, 20, 10, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Quicksand", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.13), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.08), transparent 28%),
+        linear-gradient(135deg, #5e3927, #9b6844 45%, #6d442f);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mix-blend-mode: soft-light;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 26px 18px 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .desk {
+      width: min(1120px, 100%);
+      min-height: 680px;
+      position: relative;
+      border-radius: 34px;
+      padding: 30px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.055), transparent 20%, rgba(0,0,0,.04) 55%, transparent),
+        repeating-linear-gradient(90deg, #865638 0 85px, #7c4d31 85px 170px);
+      box-shadow: 0 24px 70px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .desk::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.25) 100%);
+    }
+
+    .title-card {
+      position: relative;
+      z-index: 2;
+      width: fit-content;
+      max-width: 100%;
+      padding: 14px 22px;
+      background: rgba(255, 247, 223, .95);
+      border: 1px solid rgba(105, 74, 45, .25);
+      border-radius: 18px;
+      box-shadow: 0 10px 24px var(--shadow);
+      transform: rotate(-1.2deg);
+    }
+
+    .title-card h1 {
+      margin: 0;
+      font-family: "Caveat", cursive;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      color: var(--rose-dark);
+      line-height: .9;
+    }
+
+    .title-card p {
+      margin: 8px 0 0;
+      font-size: .95rem;
+      font-weight: 700;
+      color: #6c4930;
+    }
+
+    .counter {
+      margin-top: 10px;
+      display: inline-block;
+      font-size: .85rem;
+      padding: 6px 10px;
+      background: #f4dfb8;
+      border-radius: 999px;
+    }
+
+    .objects {
+      position: relative;
+      z-index: 2;
+      min-height: 520px;
+    }
+
+    .object {
+      position: absolute;
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+      transition: transform .25s ease, filter .25s ease;
+      font-family: inherit;
+    }
+
+    .object:hover {
+      transform: translateY(-6px) rotate(var(--rotate, 0deg)) scale(1.03);
+      filter: brightness(1.05);
+    }
+
+    .object:active {
+      transform: translateY(-2px) rotate(var(--rotate, 0deg)) scale(.98);
+    }
+
+    .polaroid {
+      width: 190px;
+      padding: 12px 12px 42px;
+      background: #fffdf8;
+      box-shadow: 0 14px 30px var(--shadow);
+      transform: rotate(var(--rotate));
+    }
+
+    .photo-box {
+      height: 140px;
+      background:
+        linear-gradient(135deg, rgba(184,92,112,.45), rgba(255,220,183,.5)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.25) 0 8px, transparent 8px 16px);
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .polaroid span {
+      position: absolute;
+      bottom: 12px;
+      left: 14px;
+      right: 14px;
+      font-family: "Caveat", cursive;
+      font-size: 1.5rem;
+      color: #62432f;
+    }
+
+    .note {
+      width: 205px;
+      min-height: 175px;
+      padding: 28px 18px 18px;
+      background: #fff1a8;
+      box-shadow: 0 14px 30px var(--shadow);
+      transform: rotate(var(--rotate));
+      border-radius: 3px 3px 18px 3px;
+      text-align: left;
+    }
+
+    .note::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 78px;
+      height: 24px;
+      background: rgba(255,255,255,.45);
+      box-shadow: 0 2px 5px rgba(0,0,0,.12);
+    }
+
+    .note strong {
+      display: block;
+      font-family: "Caveat", cursive;
+      font-size: 2rem;
+      color: var(--rose-dark);
+    }
+
+    .note small {
+      display: block;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+
+    .ticket {
+      width: 230px;
+      padding: 20px;
+      background: #f9ead0;
+      box-shadow: 0 14px 30px var(--shadow);
+      transform: rotate(var(--rotate));
+      border-radius: 12px;
+      border: 2px dashed rgba(126,51,68,.45);
+      text-align: left;
+    }
+
+    .ticket::before,
+    .ticket::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #845537;
+      transform: translateY(-50%);
+    }
+
+    .ticket::before { left: -14px; }
+    .ticket::after { right: -14px; }
+
+    .ticket b {
+      display: block;
+      letter-spacing: 2px;
+      color: var(--rose-dark);
+      font-size: .9rem;
+    }
+
+    .ticket span {
+      display: block;
+      margin-top: 8px;
+      font-family: "Caveat", cursive;
+      font-size: 1.9rem;
+    }
+
+    .mini-card {
+      width: 185px;
+      padding: 18px;
+      background: #e9f0dc;
+      border-radius: 18px;
+      box-shadow: 0 14px 30px var(--shadow);
+      transform: rotate(var(--rotate));
+      text-align: left;
+    }
+
+    .mini-card .heart {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .mini-card b {
+      font-family: "Caveat", cursive;
+      font-size: 1.8rem;
+      color: #4f6541;
+    }
+
+    .envelope-wrap {
+      width: 275px;
+      height: 190px;
+      background: transparent;
+      transform: rotate(var(--rotate));
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 18px 24px var(--shadow));
+    }
+
+    .env-body {
+      position: absolute;
+      inset: 48px 0 0;
+      background: #e8c48f;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(95,60,38,.25);
+    }
+
+    .env-body::before,
+    .env-body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 49%, rgba(126,51,68,.28) 50%, transparent 51%);
+    }
+
+    .env-body::after {
+      background: linear-gradient(225deg, transparent 49%, rgba(126,51,68,.22) 50%, transparent 51%);
+    }
+
+    .env-flap {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 137px solid transparent;
+      border-right: 137px solid transparent;
+      border-top: 96px solid #d9ae75;
+      transform-origin: top center;
+      transition: transform .7s ease;
+      z-index: 4;
+    }
+
+    .envelope-wrap.open .env-flap {
+      transform: rotateX(180deg);
+    }
+
+    .env-label {
+      position: absolute;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background: rgba(255,250,240,.82);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: "Caveat", cursive;
+      font-size: 1.55rem;
+      white-space: nowrap;
+      color: var(--rose-dark);
+    }
+
+    .locked-hint {
+      position: absolute;
+      top: 210px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.32);
+      color: #fff7df;
+      font-size: .82rem;
+      font-weight: 700;
+      opacity: .9;
+    }
+
+    .opened-mark {
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #6f8f52;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 8px 15px rgba(0,0,0,.22);
+      opacity: 0;
+      transform: scale(.5);
+      transition: .25s ease;
+    }
+
+    .object.seen .opened-mark {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(20, 10, 5, .58);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+      animation: fade .22s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal {
+      width: min(680px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      position: relative;
+      padding: 42px 34px 34px;
+      background:
+        linear-gradient(rgba(255,255,255,.55), rgba(255,255,255,.05)),
+        var(--paper);
+      border-radius: 18px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+      border: 1px solid rgba(100,70,40,.25);
+      animation: pop .25s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(.94) translateY(12px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 120px;
+      height: 32px;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(255,255,255,.5);
+      box-shadow: 0 3px 8px rgba(0,0,0,.15);
+    }
+
+    .modal h2 {
+      margin: 0 0 14px;
+      font-family: "Caveat", cursive;
+      color: var(--rose-dark);
+      font-size: clamp(2.3rem, 7vw, 4rem);
+      line-height: .9;
+    }
+
+    .modal p {
+      font-size: 1.08rem;
+      line-height: 1.8;
+      margin: 14px 0;
+    }
+
+    .letter-text {
+      font-family: "Caveat", cursive;
+      font-size: clamp(1.65rem, 4.7vw, 2.35rem) !important;
+      line-height: 1.25 !important;
+    }
+
+    .close-btn {
+      position: sticky;
+      top: 0;
+      float: right;
+      border: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--rose-dark);
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0,0,0,.18);
+    }
+
+    .continue-btn {
+      border: 0;
+      margin-top: 12px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: var(--rose);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(126,51,68,.24);
+    }
+
+    .typewriter::after {
+      content: "|";
+      animation: blink .7s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -30px;
+      font-size: 1.4rem;
+      animation: floatUp 4s linear forwards;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0) rotate(0); opacity: .95; }
+      to { transform: translateY(-110vh) rotate(35deg); opacity: 0; }
+    }
+
+    /* Posiciones de los objetos en escritorio */
+    #obj-photo-1 { left: 60px; top: 165px; --rotate: -8deg; }
+    #obj-note-1 { left: 290px; top: 145px; --rotate: 5deg; }
+    #obj-ticket { right: 110px; top: 115px; --rotate: 7deg; }
+    #obj-photo-2 { right: 280px; bottom: 80px; --rotate: 6deg; }
+    #obj-mini { left: 145px; bottom: 72px; --rotate: 8deg; }
+    #obj-envelope { left: 50%; top: 305px; margin-left: -137px; --rotate: -2deg; }
+
+    @media (max-width: 900px) {
+      .desk {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .objects {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        min-height: auto;
+        padding: 24px 0 10px;
+      }
+
+      .object {
+        position: relative;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        margin: 0 auto !important;
+      }
+
+      .locked-hint {
+        position: static;
+        transform: none;
+        margin: 14px auto 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="desk" aria-label="Mesa con recuerdos interactivos">
+      <div class="title-card">
+        <h1>Para mi amor</h1>
+        <p>Toca cada recuerdo. El sobre se desbloquea al final.</p>
+        <span class="counter" id="counter">0/5 recuerdos abiertos</span>
+      </div>
+
+      <div class="objects">
+        <button class="object polaroid" id="obj-photo-1"
+          data-id="foto1"
+          data-title="Este recuerdo"
+          data-message="Amo ver nuestras fotos juntos y sobre todo esta ya que es de las primeras que nos tomamos, me recuerda a cuando nos conocimos y me hace muy feliz pensar en todo lo que hemos avanzado juntos y aprendido del otro, además de demostrarnos amor todos los días&lt;33.">
+
+          <div class="photo-box">
+            <img src="foto1.jpg" alt="Nosotros">
+          </div>
+
+          <span>nuestro día</span>
+          <i class="opened-mark">✓</i>
+        </button>
+
+        <button class="object note" id="obj-note-1"
+          data-id="nota1"
+          data-title="Recordatorio de lo increíble que eres&lt;33"
+          data-message="Hay cosas de ti que me enamoran todos los días sin que te des cuenta: tu forma de hablar, tus gestos, tus abrazos, tu risa, y esa manera tan tuya de hacerme sentir que estoy en casa.">
+
+          <strong>Nota rápida</strong>
+          <small>Pequeñísima lista de las infinitas cosas que me gustan de ti.</small>
+          <i class="opened-mark">✓</i>
+        </button>
+
+        <button class="object ticket" id="obj-ticket"
+          data-id="ticket"
+          data-title="Admit One"
+          data-message="Si pudiera repetir una salida, una plática o un abrazo contigo, probablemente elegiría todos. Porque contigo no solamente paso tiempo: Contigo creo recuerdos, momentos, risas, anhelos y planes, además de la inmensa felicidad que me das&lt;33.">
+
+          <b>CUPÓN</b>
+          <span>Válido por muchos abrazos y besitos</span>
+          <i class="opened-mark">✓</i>
+        </button>
+
+        <button class="object polaroid" id="obj-photo-2"
+          data-id="foto2"
+          data-title="Una foto mental"
+          data-message="A veces no necesito una foto para acordarme de ti. Me basta una canción, una palabra o un lugar para que aparezcas en mi cabeza y me den ganas de abrazarte&lt;33">
+
+          <div class="photo-box">
+            <img src="foto2.jpg" alt="Tú en mi mente">
+          </div>
+
+          <span>Tú en mi mente</span>
+          <i class="opened-mark">✓</i>
+        </button>
+
+        <button class="object mini-card" id="obj-mini"
+          data-id="mini"
+          data-title="Razón número mil"
+          data-message="Te amo por cómo eres, por cómo me haces sentir, por todo lo que provocas en mí y el ver como creces día con día. Eres absolutamente todo para mí&lt;33.">
+
+          <span class="heart">♥</span>
+          <b>Razón #1000</b>
+          <p>Porque eres tú&lt;33</p>
+          <i class="opened-mark">✓</i>
+        </button>
+
+        <button class="object envelope-wrap" id="obj-envelope" aria-label="Abrir carta final">
+          <div class="envelope">
+            <div class="env-flap"></div>
+            <div class="env-body"></div>
+            <div class="env-label">Abrir al final</div>
+          </div>
+          <div class="locked-hint" id="lockedHint">Primero abre los 5 recuerdos</div>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <article class="modal">
+      <button class="close-btn" id="closeBtn" aria-label="Cerrar">×</button>
+      <h2 id="modalTitle"></h2>
+      <p id="modalText"></p>
+      <button class="continue-btn" id="continueBtn">Listo</button>
+    </article>
+  </div>
+
+  <div class="floating-hearts" id="floatingHearts"></div>
+
+  <!-- Canciones: deben estar en la misma carpeta que este archivo -->
+  <audio id="music" preload="auto"></audio>
+
+  <script>
+    const memoriesNeeded = 5;
+    const opened = new Set();
+
+    const counter = document.getElementById("counter");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const closeBtn = document.getElementById("closeBtn");
+    const continueBtn = document.getElementById("continueBtn");
+    const envelope = document.getElementById("obj-envelope");
+    const lockedHint = document.getElementById("lockedHint");
+    const floatingHearts = document.getElementById("floatingHearts");
+
+    const playlist = ["theonly.mp3", "teamoymas.mp3"];
+    let currentSongIndex = 0;
+    const music = document.getElementById("music");
+
+    if (music) {
+      music.src = playlist[currentSongIndex];
+
+      music.addEventListener("ended", () => {
+        currentSongIndex = (currentSongIndex + 1) % playlist.length;
+        music.src = playlist[currentSongIndex];
+        music.play().catch(() => {});
+      });
+    }
+
+    let currentObject = null;
+
+    const finalLetter = `
+      Ola amorchurrito, quería hacerte algo un poquito diferente y mejor a la vez pasada, además de que tenía demasiadas ganas de escribirte y demostrarte un poquito de lo mucho que te amo y te quiero amor mío &lt;33
+      <br><br>
+      La verdad, nunca me alcanzan ni me alcanzarán las palabras y acciones para poderte demostrar lo mucho que te amo mi amor. Me gusta estar contigo, escucharte, abrazarte, reírme contigo y sentir que, aunque el mundo esté pesado, contigo todo se vuelve mucho mucho más bonito.
+      <br><br>
+      Gracias por ser tú. Gracias por quedarte, por existir en mis días, en mi vida y por darme recuerdos que quiero guardar siempre, los cuales atesoraré cuando esté en mi lecho de muerte a tu lado. No sé qué tan perfecta me quedó esta carta, pero te prometo que es con mucho amor y la hice pensando en ti&lt;33.
+      <br><br>
+      Te amo muchísimo amor mío y gracias por estar a mi lado y elegirme día con día, no sabes lo privilegiado que soy por eso mi vida.
+      <br><br>
+      Me haces demasiado feliz amor mío, no sabes enserio como iluminas mis minutos, mis horas, mis días, mi vida entera y estaré agradecido contigo siempre mi corazón.
+      <br><br>
+      Amo tantísimo que seas tu, que nos digamos cosas lindas, que me "pelees" que rías, que ríamos juntos, todo todo enserio no sabes como me encanta todo de ti y de nuestra relación&lt;33
+      <br><br>
+      Por favor quédate el tiempo que desees, cada segundo a tu lado es un privilegio para mí y ojalá te quedes toda la eternidad mi amor &lt;333
+      <br><br>
+      "Maldito sea yo mil veces, si no dedico toda mi vida, toda mi alma y todas mis fuerzas a hacerte feliz".
+      <br><br>
+      Siempre tuyo, Janko. &lt;33
+    `;
+
+    function updateCounter() {
+      counter.textContent = `${opened.size}/${memoriesNeeded} recuerdos abiertos`;
+      if (opened.size >= memoriesNeeded) {
+        lockedHint.textContent = "Abre la carta amorchurrito<33";
+        envelope.classList.add("ready");
+      }
+    }
+
+    function openModal(title, message, isFinal = false) {
+      modalTitle.textContent = title;
+      modalText.className = isFinal ? "letter-text typewriter" : "";
+      modalBackdrop.classList.add("show");
+
+      if (isFinal) {
+        continueBtn.textContent = "Cerrar carta";
+        typeWriterHTML(modalText, message, 16);
+      } else {
+        continueBtn.textContent = "Listo";
+        modalText.textContent = message;
+      }
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("show");
+      modalText.className = "";
+      modalText.innerHTML = "";
+      currentObject = null;
+    }
+
+    function typeWriterHTML(element, html, speed) {
+      element.innerHTML = "";
+      let i = 0;
+      const plainPieces = html.split("");
+
+      function type() {
+        if (i < plainPieces.length) {
+          element.innerHTML += plainPieces[i];
+          i++;
+          setTimeout(type, speed);
+        } else {
+          element.classList.remove("typewriter");
+        }
+      }
+
+      type();
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 18; i++) {
+        const heart = document.createElement("span");
+        heart.className = "floating-heart";
+        heart.textContent = ["♥", "♡", "❥"][Math.floor(Math.random() * 3)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDelay = Math.random() * .8 + "s";
+        heart.style.fontSize = 1 + Math.random() * 1.4 + "rem";
+        floatingHearts.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 5200);
+      }
+    }
+
+    document.querySelectorAll(".object[data-id]").forEach((object) => {
+      object.addEventListener("click", () => {
+        currentObject = object;
+        openModal(object.dataset.title, object.dataset.message);
+      });
+    });
+
+    envelope.addEventListener("click", () => {
+      if (opened.size < memoriesNeeded) {
+        lockedHint.animate([
+          { transform: "translateX(-50%) translateY(0)" },
+          { transform: "translateX(-50%) translateY(-6px)" },
+          { transform: "translateX(-50%) translateY(0)" }
+        ], { duration: 250, iterations: 2 });
+        return;
+      }
+
+      envelope.classList.add("open");
+      createHearts();
+      openModal("Para mi futura esposa:", finalLetter, true);
+
+      if (music) {
+        music.play().catch(() => {
+          lockedHint.textContent = "Toca otra vez para activar la música";
+        });
+      }
+    });
+
+    continueBtn.addEventListener("click", () => {
+      if (currentObject && currentObject.dataset.id) {
+        opened.add(currentObject.dataset.id);
+        currentObject.classList.add("seen");
+        updateCounter();
+      }
+      closeModal();
+    });
+
+    closeBtn.addEventListener("click", () => {
+      if (currentObject && currentObject.dataset.id) {
+        opened.add(currentObject.dataset.id);
+        currentObject.classList.add("seen");
+        updateCounter();
+      }
+      closeModal();
+    });
+
+    modalBackdrop.addEventListener("click", (event) => {
+      if (event.target === modalBackdrop) {
+        if (currentObject && currentObject.dataset.id) {
+          opened.add(currentObject.dataset.id);
+          currentObject.classList.add("seen");
+          updateCounter();
+        }
+        closeModal();
+      }
+    });
+
+    updateCounter();
+  </script>
+</body>
+</html>
