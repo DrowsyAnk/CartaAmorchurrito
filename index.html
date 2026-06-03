@@ -517,6 +517,28 @@
     #obj-mini { left: 145px; bottom: 72px; --rotate: 8deg; }
     #obj-envelope { left: 50%; top: 305px; margin-left: -137px; --rotate: -2deg; }
 
+
+
+    .start-music-btn {
+      position: fixed;
+      z-index: 999;
+      top: 20px;
+      right: 20px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 999px;
+      background: var(--rose-dark);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,.24);
+    }
+
+    .start-music-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
     @media (max-width: 900px) {
       .desk {
         min-height: auto;
@@ -549,6 +571,7 @@
   </style>
 </head>
 <body>
+  <button id="startMusicBtn" class="start-music-btn">Activar música ♡</button>
   <main class="app">
     <section class="desk" aria-label="Mesa con recuerdos interactivos">
       <div class="title-card">
@@ -655,9 +678,10 @@
     const lockedHint = document.getElementById("lockedHint");
     const floatingHearts = document.getElementById("floatingHearts");
 
-    const playlist = ["theonly.mp3", "teamoymas.mp3"];
+    const playlist = ["teamoymas.mp3", "theonly.mp3"];
     let currentSongIndex = 0;
     const music = document.getElementById("music");
+    const startMusicBtn = document.getElementById("startMusicBtn");
 
     if (music) {
       music.src = playlist[currentSongIndex];
@@ -666,6 +690,16 @@
         currentSongIndex = (currentSongIndex + 1) % playlist.length;
         music.src = playlist[currentSongIndex];
         music.play().catch(() => {});
+      });
+    }
+
+    if (startMusicBtn && music) {
+      startMusicBtn.addEventListener("click", () => {
+        music.play().then(() => {
+          startMusicBtn.style.display = "none";
+        }).catch(() => {
+          startMusicBtn.textContent = "Toca otra vez ♡";
+        });
       });
     }
 
@@ -775,7 +809,8 @@
 
       if (music) {
         music.play().catch(() => {
-          lockedHint.textContent = "Toca otra vez para activar la música";
+          lockedHint.textContent = "Toca el botón de música de arriba ♡";
+          if (startMusicBtn) startMusicBtn.style.display = "block";
         });
       }
     });
