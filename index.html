@@ -451,6 +451,7 @@
       font-family: "Caveat", cursive;
       font-size: clamp(1.65rem, 4.7vw, 2.35rem) !important;
       line-height: 1.25 !important;
+      white-space: pre-line;
     }
 
     .close-btn {
@@ -680,6 +681,7 @@
 
     const playlist = ["teamoymas.mp3", "theonly.mp3"];
     let currentSongIndex = 0;
+    let finalSongMode = false;
     const music = document.getElementById("music");
     const startMusicBtn = document.getElementById("startMusicBtn");
 
@@ -687,6 +689,12 @@
       music.src = playlist[currentSongIndex];
 
       music.addEventListener("ended", () => {
+        if (finalSongMode) {
+          music.currentTime = 0;
+          music.play().catch(() => {});
+          return;
+        }
+
         currentSongIndex = (currentSongIndex + 1) % playlist.length;
         music.src = playlist[currentSongIndex];
         music.play().catch(() => {});
@@ -705,25 +713,23 @@
 
     let currentObject = null;
 
-    const finalLetter = `
-      Ola amorchurrito, quería hacerte algo un poquito diferente y mejor a la vez pasada, además de que tenía demasiadas ganas de escribirte y demostrarte un poquito de lo mucho que te amo y te quiero amor mío &lt;33
-      <br><br>
-      La verdad, nunca me alcanzan ni me alcanzarán las palabras y acciones para poderte demostrar lo mucho que te amo mi amor. Me gusta estar contigo, escucharte, abrazarte, reírme contigo y sentir que, aunque el mundo esté pesado, contigo todo se vuelve mucho mucho más bonito.
-      <br><br>
-      Gracias por ser tú. Gracias por quedarte, por existir en mis días, en mi vida y por darme recuerdos que quiero guardar siempre, los cuales atesoraré cuando esté en mi lecho de muerte a tu lado. No sé qué tan perfecta me quedó esta carta, pero te prometo que es con mucho amor y la hice pensando en ti&lt;33.
-      <br><br>
-      Te amo muchísimo amor mío y gracias por estar a mi lado y elegirme día con día, no sabes lo privilegiado que soy por eso mi vida.
-      <br><br>
-      Me haces demasiado feliz amor mío, no sabes enserio como iluminas mis minutos, mis horas, mis días, mi vida entera y estaré agradecido contigo siempre mi corazón.
-      <br><br>
-      Amo tantísimo que seas tu, que nos digamos cosas lindas, que me "pelees" que rías, que ríamos juntos, todo todo enserio no sabes como me encanta todo de ti y de nuestra relación&lt;33
-      <br><br>
-      Por favor quédate el tiempo que desees, cada segundo a tu lado es un privilegio para mí y ojalá te quedes toda la eternidad mi amor &lt;333
-      <br><br>
-      "Maldito sea yo mil veces, si no dedico toda mi vida, toda mi alma y todas mis fuerzas a hacerte feliz".
-      <br><br>
-      Siempre tuyo, Janko. &lt;33
-    `;
+    const finalLetter = `Ola amorchurrito, quería hacerte algo un poquito diferente y mejor a la vez pasada, además de que tenía demasiadas ganas de escribirte y demostrarte un poquito de lo mucho que te amo y te quiero amor mío <33
+
+La verdad, nunca me alcanzan ni me alcanzarán las palabras y acciones para poderte demostrar lo mucho que te amo mi amor. Me gusta estar contigo, escucharte, abrazarte, reírme contigo y sentir que, aunque el mundo esté pesado, contigo todo se vuelve mucho mucho más bonito.
+
+Gracias por ser tú. Gracias por quedarte, por existir en mis días, en mi vida y por darme recuerdos que quiero guardar siempre, los cuales atesoraré cuando esté en mi lecho de muerte a tu lado. No sé qué tan perfecta me quedó esta carta, pero te prometo que es con mucho amor y la hice pensando en ti <33.
+
+Te amo muchísimo amor mío y gracias por estar a mi lado y elegirme día con día, no sabes lo privilegiado que soy por eso mi vida.
+
+Me haces demasiado feliz amor mío, no sabes enserio cómo iluminas mis minutos, mis horas, mis días, mi vida entera y estaré agradecido contigo siempre mi corazón.
+
+Amo tantísimo que seas tú, que nos digamos cosas lindas, que me "pelees", que rías, que ríamos juntos, todo todo, enserio no sabes cómo me encanta todo de ti y de nuestra relación <33
+
+Por favor quédate el tiempo que desees, cada segundo a tu lado es un privilegio para mí y ojalá te quedes toda la eternidad mi amor <333
+
+"Maldito sea yo mil veces, si no dedico toda mi vida, toda mi alma y todas mis fuerzas a hacerte feliz".
+
+Siempre tuyo, Janko. <33`;
 
     function updateCounter() {
       counter.textContent = `${opened.size}/${memoriesNeeded} recuerdos abiertos`;
@@ -740,7 +746,7 @@
 
       if (isFinal) {
         continueBtn.textContent = "Cerrar carta";
-        typeWriterHTML(modalText, message, 16);
+        typeWriterText(modalText, message, 16);
       } else {
         continueBtn.textContent = "Listo";
         modalText.textContent = message;
@@ -754,14 +760,13 @@
       currentObject = null;
     }
 
-    function typeWriterHTML(element, html, speed) {
-      element.innerHTML = "";
+    function typeWriterText(element, text, speed) {
+      element.textContent = "";
       let i = 0;
-      const plainPieces = html.split("");
 
       function type() {
-        if (i < plainPieces.length) {
-          element.innerHTML += plainPieces[i];
+        if (i < text.length) {
+          element.textContent += text[i];
           i++;
           setTimeout(type, speed);
         } else {
@@ -808,6 +813,12 @@
       openModal("Para mi futura esposa:", finalLetter, true);
 
       if (music) {
+        finalSongMode = true;
+        currentSongIndex = 1;
+        music.pause();
+        music.src = "theonly.mp3";
+        music.currentTime = 0;
+
         music.play().catch(() => {
           lockedHint.textContent = "Toca el botón de música de arriba ♡";
           if (startMusicBtn) startMusicBtn.style.display = "block";
